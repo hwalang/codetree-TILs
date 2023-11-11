@@ -88,8 +88,8 @@ bool IsFiveHeight(int num) {
 
 			if (cnt == 5) {				// 5줄을 만족하는 경우
 				ans = num;
-				middle_x = (i + 1) - 2;		// 1번부터 시작
-				middle_y = (j + 1);
+				middle_x = (j + 1) - 2;		// 1번부터 시작
+				middle_y = (i + 1);
 				return true;
 			}
 		}
