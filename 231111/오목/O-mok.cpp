@@ -23,9 +23,11 @@ bool IsFiveRightDiagonal(int num) {
 
 			// cnt = 1부터 시작
 			int cnt = 1;
+			int nx = i;
+			int ny = j;
 			for (; cnt < 5; ++cnt) {		// 연속된 5줄을 찾는다.
-				int nx = i + dx[dir];
-				int ny = j + dx[dir];
+				nx += dx[dir];
+				ny += dx[dir];
 				if (!InRange(nx, ny) || board[i][j] != num) break;	// 범위 밖 또는 num이 아닌 경우
 			}
 
@@ -50,9 +52,11 @@ bool IsFiveLeftDiagonal(int num) {
 
 			// cnt = 1부터 시작
 			int cnt = 1;
+			int nx = i;
+			int ny = j;
 			for (; cnt < 5; ++cnt) {		// 연속된 5줄을 찾는다.
-				int nx = i + dx[dir];
-				int ny = j + dx[dir];
+				nx += dx[dir];
+				ny += dx[dir];
 				if (!InRange(nx, ny) || board[i][j] != num) break;	// 범위 밖 또는 num이 아닌 경우
 			}
 
