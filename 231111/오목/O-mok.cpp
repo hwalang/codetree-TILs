@@ -63,7 +63,7 @@ bool IsFiveLeftDiagonal(int num) {
 
 			if (cnt == 5) {		// 5줄인 경우
 				ans = num;
-				middle_x = (i + 1) - 2;
+				middle_x = (i + 1) + 2;
 				middle_y = (j + 1) - 2;
 				return true;
 			}
