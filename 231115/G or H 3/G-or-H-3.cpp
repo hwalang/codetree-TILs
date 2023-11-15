@@ -22,7 +22,7 @@ int main() {
 
 	// 구간 합 구하기
 	K++;
-	for (int i = 1; i <= max_idx + K + 1; ++i) {
+	for (int i = 1; i <= max_idx - K + 1; ++i) {
 		int sum = 0;
 		for (int j = i; j < i + K; ++j)
 			sum += loc[j];
