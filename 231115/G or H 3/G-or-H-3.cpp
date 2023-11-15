@@ -19,10 +19,9 @@ int main() {
 			loc[cur_idx] = 2;
 		max_idx = max(max_idx, cur_idx);
 	}
-
 	// 구간 합 구하기
 	K++;
-	for (int i = 1; i <= max_idx - K + 1; ++i) {
+	for (int i = 1; i <= MAX_L - K + 1; ++i) {
 		int sum = 0;
 		for (int j = i; j < i + K; ++j)
 			sum += loc[j];
