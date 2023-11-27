@@ -14,7 +14,7 @@ int main() {
 		// 바구니 위치와 사탕 개수를 입력 받는다.
 		int cnt, loc;
 		cin >> cnt >> loc;
-		barket[loc] = cnt;
+		barket[loc] += cnt;	// 같은 위치에 여러 개의 바구니가 있을 수 있다.
 	}
 	
 	// 중심점을 잡는다.
