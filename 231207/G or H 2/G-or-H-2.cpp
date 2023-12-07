@@ -65,8 +65,7 @@ int main() {
 			else if (loc[j] == 'H') ++cntH;
 			else continue;
 
-			if (abs(cntG - cntH) >= 2) break;
-			else if ( (loc[j] == 'G' || loc[j] == 'H') && cntG == cntH) end_loc = j;
+			if ( (loc[j] == 'G' || loc[j] == 'H') && cntG == cntH) end_loc = j;
 		}
 
 		int picture_size = end_loc - start_loc;
