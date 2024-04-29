@@ -13,15 +13,12 @@ bool solution()
     {
         if (input[i] == '(')
         {
-            if (_stack.empty())
-                _stack.push(input[i]);
-            else
-                return false;
+            _stack.push(input[i]);
         }
         else if (input[i] == ')')
         {
             if (_stack.empty()) return false;
-            
+
             if (_stack.top() == '(')
             {
                 _stack.pop();
@@ -31,11 +28,9 @@ bool solution()
                 return false;
             }
         }
-        else
-        {
-            return false;
-        }
     }
+
+    if (!_stack.empty()) return false;
 
     return true;
 }
