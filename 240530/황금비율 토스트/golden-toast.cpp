@@ -1,48 +1,63 @@
 #include <iostream>
+#include <string>
 #include <list>
-
 using namespace std;
 
 int N, M;
-list<char> li;
+string commands;
+list<char> breads;
 list<char>::iterator it;
 
-int main() {
+void Init()
+{
+    cin >> N >> M >> commands;
+    for (int i = 0; i < commands.length(); ++i) {
+        breads.push_back(commands[i]);
+    }
+    it = breads.end();
+}
 
-	cin >> N >> M;
+void ExecuteCommand()
+{
+    while (M--) {
+        char command;
+        cin >> command;
 
-	for (int i = 0; i < N; ++i) {
-		char input;
-		cin >> input;
-		li.push_back(input);
-	}
-	it = li.end();
+        if (command == 'L') {
+            if (it != breads.begin()) {
+                it--;
+            }
+        }
+        else if (command == 'R') {
+            if (it != breads.end()) {
+                it++;
+            }
+        }
+        else if (command == 'D') {
+            if (it != breads.end()) {
+                it = breads.erase(it);
+            }
+        }
+        else if (command == 'P') {
+            char insertC;
+            cin >> insertC;
+            breads.insert(it, insertC);
+        }
+    }
+}
 
-	for (int i = 0; i < M; ++i) {
-		char order;
-		cin >> order;
-		
-		if (order == 'L') {
-			if (it == li.begin()) continue;
-			it--;
-		}
-		else if (order == 'R') {
-			if (it == li.end()) continue;
-			it++;
-		}
-		else if (order == 'D') {
-			if (it == li.end()) continue;
-			li.erase(it);
-		}
-		else {
-			char input;
-			cin >> input;
-			li.insert(it, input);
-		}
-	}
+void PrintIterator()
+{
+    for (it = breads.begin(); it != breads.end(); ++it) {
+        cout << *it;
+    }
+}
 
-	for (it = li.begin(); it != li.end(); ++it) {
-		cout << *it;
-	}
+int main() 
+{
+    Init();
+    ExecuteCommand();
+    PrintIterator();
 
+    return 0;
 }
