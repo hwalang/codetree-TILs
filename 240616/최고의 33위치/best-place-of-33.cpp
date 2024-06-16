@@ -4,16 +4,17 @@
 using namespace std;
 
 const int MAX_N = 20;
+const int GRID_SIZE = 3;
 
-int GetNumOfCoin(const int& x, const int& y, const int baseGrid[MAX_N][MAX_N])
+int GetNumOfCoin(int x, int y, const int baseGrid[MAX_N][MAX_N])
 {
 	int coin = 0;
 
 	// 시작점을 기준으로 3 * 3 격자 내부의 동전수를 구함
-	for (int i = x; i < x + 3; ++i) {
-		for (int j = y; j < y + 3; ++j) {
+	for (int i = x; i < x + GRID_SIZE; ++i) {
+		for (int j = y; j < y + GRID_SIZE; ++j) {
 			if (baseGrid[i][j] == 1) {
-				++coin;
+				++coin;					// 0과 1만 존재하기 떄문에 coin += baseGrid[i][j];도 가능
 			}
 		}
 	}
@@ -21,14 +22,13 @@ int GetNumOfCoin(const int& x, const int& y, const int baseGrid[MAX_N][MAX_N])
 	return coin;
 }
 
-int GetMaxCoin(const int& N, const int baseGrid[MAX_N][MAX_N])
+int GetMaxCoin(int N, const int baseGrid[MAX_N][MAX_N])
 {
 	int maxCoin = 0;
 
 	// N * N 격자를 순회
-	for (int i = 0; i < N; ++i) {
-		for (int j = 0; j < N; ++j) {
-			if (i + 2 >= N || j + 2 >= N) continue;
+	for (int i = 0; i <= N - GRID_SIZE; ++i) {
+		for (int j = 0; j <= N - GRID_SIZE; ++j) {
 			// 최대 동전수 갱신
 			maxCoin = max(maxCoin, GetNumOfCoin(i, j, baseGrid));
 		}
