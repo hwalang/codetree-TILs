@@ -16,14 +16,9 @@ int GetNumOfHappySeq(int N, int M)
 		int sameCnt = 1;
 		
 		for (int col = 1; col < N; ++col) {
-			if (sameCnt == M) {
-				hNum++;
-				break;
-			}
-
+			
 			int prevNum = arr[col - 1][row];
 			int curNum = arr[col][row];
-			
 
 			if (prevNum == curNum) {
 				sameCnt++;
@@ -37,6 +32,11 @@ int GetNumOfHappySeq(int N, int M)
 			cout << "(" << col << ", " << row << "): " << curNum << endl;
 			cout << "same count: " << sameCnt << endl;
 			cout << "----------------------------\n";*/
+
+			if (sameCnt == M) {
+				hNum++;
+				break;
+			}
 		}
 	}
 
@@ -50,7 +50,6 @@ int GetNumOfHappySeq(int N, int M)
 			
 			int prevNum = arr[col][row - 1];
 			int curNum = arr[col][row];
-
 
 			if (prevNum == curNum) {
 				sameCnt++;
