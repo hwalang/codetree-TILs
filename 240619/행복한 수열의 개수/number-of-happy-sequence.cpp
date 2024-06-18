@@ -86,6 +86,13 @@ int main()
 		}
 	}
 
-	int ans = GetNumOfHappySeq(N, M);
+	int ans = 0;
+	if (M == 1) {
+		ans = N * 2;
+	}
+	else {
+		ans = GetNumOfHappySeq(N, M);
+	}
+	 
 	cout << ans;
 }
