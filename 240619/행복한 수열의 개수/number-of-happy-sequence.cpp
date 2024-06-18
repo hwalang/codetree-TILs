@@ -6,68 +6,49 @@ const int MAX_N = 100;
 
 int arr[MAX_N][MAX_N];
 
+// 1차원 수열에서 행복한 수열이 존재하는 경우를 판단한다.
+bool CheckHappySeq(const int seq[], int length, int M)
+{
+	int sameCnt = 1;
+
+	for (int i = 1; i < length; ++i) {
+		if (seq[i] == seq[i - 1]) {
+			sameCnt++;
+		}
+		else {
+			sameCnt = 1;
+		}
+
+		if (sameCnt >= M) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 int GetNumOfHappySeq(int N, int M)
 {
 	int hNum = 0;
 
-	// 열에 존재하는 행복한 수열이 몇 개?
-	for (int row = 0; row < N; ++row) {		// 행을 이동하면서 연속된 m개의 숫자가 같은지 판단
-
-		int sameCnt = 1;
-		
-		for (int col = 1; col < N; ++col) {
-			
-			int prevNum = arr[col - 1][row];
-			int curNum = arr[col][row];
-
-			if (prevNum == curNum) {
-				sameCnt++;
-			}
-			else {
-				sameCnt = 1;
-			}
-
-			/*cout << "----------------------------\n";
-			cout << "(" << col - 1 << ", " << row << "): " << prevNum << endl;
-			cout << "(" << col << ", " << row << "): " << curNum << endl;
-			cout << "same count: " << sameCnt << endl;
-			cout << "----------------------------\n";*/
-
-			if (sameCnt == M) {
-				hNum++;
-				break;
-			}
+	// 행에 존재하는 행복한 수열이 몇 개?
+	for (int row = 0; row < N; ++row) {
+		if (CheckHappySeq(arr[row], N, M)) {
+			hNum++;
 		}
 	}
 
-	/*cout << "------------- col ---------------\n";*/
+	// 열에 존재하는 행복한 수열이 몇 개?
+	for (int col = 0; col < N; ++col) {
+		int colSeq[MAX_N];
 
-	for (int col = 0; col < N; ++col) {		// 열을 이동하면서 연속된 m개의 숫자가 같은지 판단
+		// arr의 열을 colSeq인 1차원 배열로 옮긴다.
+		for (int row = 0; row < N; ++row) {	
+			colSeq[row] = arr[row][col];
+		}
 
-		int sameCnt = 1;
-
-		for (int row = 1; row < N; ++row) {
-			
-			int prevNum = arr[col][row - 1];
-			int curNum = arr[col][row];
-
-			if (prevNum == curNum) {
-				sameCnt++;
-			}
-			else {
-				sameCnt = 1;
-			}
-
-			if (sameCnt >= M) {
-				hNum++;
-				break;
-			}
-
-			/*cout << "----------------------------\n";
-			cout << "(" << col << ", " << row - 1 << "): " << prevNum << endl;
-			cout << "(" << col << ", " << row << "): " << curNum << endl;
-			cout << "same count: " << sameCnt << endl;
-			cout << "----------------------------\n";*/
+		if (CheckHappySeq(colSeq, N, M)) {
+			hNum++;
 		}
 	}
 
