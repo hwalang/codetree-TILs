@@ -13,38 +13,76 @@ bool InRanged(int x, int y, int N)
 	return y >= 0 && y < N && x >= 0 && x < N;
 }
 
-// 현재 좌표에서 만들 수 있는 가장 큰 직사각형을 만든 뒤 최대합을 반환한다.
-int GetSumOfRhombus(int x, int y, int N)
+int GetSumOfRhombus(int x, int y, int len1, int len2, int N)
 {
 	// 1, 2, 3, 4번 이동 방향
-	pair<int, int> dir[] = { {-1, 1}, {-1, -1}, {1, -1}, {1, 1} };	
+	pair<int, int> dir[] = { {-1, 1}, {-1, -1}, {1, -1}, {1, 1} };
 
 	int sum = 0;
+	int nextX, nextY;
+	int curX = x, curY = y;
 
-	// grid 밖을 나가지 않는 범위 내에서 한 방향을 계속 전진하며서 합을 구함
-	int curX = x;
-	int curY = y;
-	for (int d = 0; d < 4; ++d) {
+	// 1번 방향
+	for (int i = 1; i <= len1; ++i) {
+		nextX = curX + dir[0].first;
+		nextY = curY + dir[0].second;
+		if (!InRanged(nextX, nextY, N)) return -1;
 
-		while (true) {
-			int nextX = curX + dir[d].first;
-			int nextY = curY + dir[d].second;
-			
-			//cout << "d: " << d << " first, second: " << dir[d].first << " | " << dir[d].second << endl;
+		sum += grid[nextX][nextY];
+		curX = nextX;
+		curY = nextY;
+	}
 
-			if (!InRanged(nextX, nextY, N)) {		// 최상, 최좌, 최우는 이미 막혔기에 sum 값이 한 번은 무조건 갱신
-				//cout << "( " << curX << ", " << curY << " ): " << grid[curX][curY]  << endl;
-				break;
-			}
+	// 2번 방향
+	for (int i = 1; i <= len2; ++i) {
+		nextX = curX + dir[1].first;
+		nextY = curY + dir[1].second;
+		if (!InRanged(nextX, nextY, N)) return -1;
 
-			sum += grid[nextX][nextY];
-			//cout << "sum: " << sum << endl;
-			curX = nextX;
-			curY = nextY;
-		}
+		sum += grid[nextX][nextY];
+		curX = nextX;
+		curY = nextY;
+	}
+
+	// 3번 방향
+	for (int i = 1; i <= len1; ++i) {
+		nextX = curX + dir[2].first;
+		nextY = curY + dir[2].second;
+		if (!InRanged(nextX, nextY, N)) return -1;
+
+		sum += grid[nextX][nextY];
+		curX = nextX;
+		curY = nextY;
+	}
+
+	// 4번 방향
+	for (int i = 1; i <= len2; ++i) {
+		nextX = curX + dir[3].first;
+		nextY = curY + dir[3].second;
+		if (!InRanged(nextX, nextY, N)) return -1;
+
+		sum += grid[nextX][nextY];
+		curX = nextX;
+		curY = nextY;
 	}
 
 	return sum;
+}
+
+// 현재 좌표에서 만들 수 있는 가장 큰 직사각형을 만든 뒤 최대합을 반환한다.
+int GetMaxSumOfRhombus(int x, int y, int N)
+{
+	int maxSum = 0;
+
+	// len1: 1, 3번 방향의 길이
+	// len2: 2, 4번 방향의 길이
+	for (int len1 = 1; len1 < N; ++len1) {
+		for (int len2 = 1; len2 < N; ++len2) {
+			maxSum = max(maxSum, GetSumOfRhombus(x, y, len1, len2, N));
+		}
+	}
+
+	return maxSum;
 }
 
 int main()
@@ -63,7 +101,7 @@ int main()
 	// 최상단 + 그 밑, 최좌단, 최우단은 제외
 	for (int x = 2; x < N; ++x) {
 		for (int y = 1; y < N - 1; ++y) {
-			maxSum = max(maxSum, GetSumOfRhombus(x, y, N));
+			maxSum = max(maxSum, GetMaxSumOfRhombus(x, y, N));
 		}
 	}
 
