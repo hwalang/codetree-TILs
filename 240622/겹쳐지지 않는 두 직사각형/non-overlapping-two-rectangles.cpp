@@ -5,73 +5,79 @@
 
 using namespace std;
 
-// 그리드를 읽는 함수
-void readGrid(int &n, int &m, vector<vector<int>> &grid) {
-    cin >> n >> m;
-    grid.resize(n, vector<int>(m));
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < m; ++j) {
-            cin >> grid[i][j];
-        }
-    }
+void InitPrefixSum(const vector<vector<int>>& grid, vector<vector<int>>& prefix)
+{
+	int N = grid.size();
+	int M = grid[0].size();
+	prefix.assign(N, vector<int>(M, 0));
+	for (int y = 0; y < N; ++y) {
+		for (int x = 0; x < M; ++x) {
+			prefix[y][x] = grid[y][x];
+			if (y > 0) prefix[y][x] += prefix[y - 1][x];				// (y, x) + (y - 1, x)까지의 합
+			if (x > 0) prefix[y][x] += prefix[y][x - 1];				// (y, x) + (y, x - 1)까지의 합
+			if (y > 0 && x > 0) prefix[y][x] -= prefix[y - 1][x - 1];	// (y, x) - (y - 1, x - 1)까지의 합
+		}
+	}
 }
 
-// Prefix Sum을 계산하는 함수
-void computePrefixSums(const vector<vector<int>> &grid, vector<vector<int>> &prefix) {
-    int n = grid.size();
-    int m = grid[0].size();
-    prefix.assign(n + 1, vector<int>(m + 1, 0));
-    for (int i = 1; i <= n; ++i) {
-        for (int j = 1; j <= m; ++j) {
-            prefix[i][j] = grid[i-1][j-1] + prefix[i-1][j] + prefix[i][j-1] - prefix[i-1][j-1];
-        }
-    }
+int GetSum(const vector<vector<int>>& prefix, int y1, int x1, int y2, int x2)
+{
+	int sum = prefix[y2][x2];
+	if (y1 > 0) sum -= prefix[y1 - 1][x2];
+	if (x1 > 0) sum -= prefix[y2][x1 - 1];
+	if (y1 > 0 && x1 > 0) sum += prefix[y1 - 1][x1 - 1];
+	return sum;
 }
 
-// 서브 직사각형의 합을 구하는 함수
-int getSum(const vector<vector<int>> &prefix, int r1, int c1, int r2, int c2) {
-    return prefix[r2+1][c2+1] - prefix[r1][c2+1] - prefix[r2+1][c1] + prefix[r1][c1];
+int GetMaxSum(const vector<vector<int>>& grid)
+{
+	int N = grid.size();
+	int M = grid[0].size();
+
+	vector<vector<int>> prefix;
+	InitPrefixSum(grid, prefix);
+
+	int maxSum = INT_MIN;
+
+	// 첫 번째 직사각형
+	for (int y1 = 0; y1 < N; ++y1) {
+		for (int x1 = 0; x1 < M; ++x1) {
+			for (int y2 = y1; y2 < N; ++y2) {
+				for (int x2 = x1; x2 < M; ++x2) {
+					int sumRect1 = GetSum(prefix, y1, x1, y2, x2);
+
+					// 두 번째 직사각형
+					for (int yy1 = 0; yy1 < N; ++yy1) {
+						for (int xx1 = 0; xx1 < M; ++xx1) {
+							for (int yy2 = yy1; yy2 < N; ++yy2) {
+								for (int xx2 = xx1; xx2 < M; ++xx2) {
+									if (yy1 > y2 || yy2 < y1 || xx1 > x2 || xx2 < x1) {
+										int sumRect2 = GetSum(prefix, yy1, xx1, yy2, xx2);
+										maxSum = max(maxSum, sumRect1 + sumRect2);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return maxSum;
 }
 
-// 최대 합을 계산하는 함수
-int findMaxSum(const vector<vector<int>> &grid) {
-    int n = grid.size();
-    int m = grid[0].size();
-    vector<vector<int>> prefix;
-    computePrefixSums(grid, prefix);
-    
-    int max_sum = INT_MIN;
+int main()
+{
+	int N, M;
+	cin >> N >> M;
 
-    for (int r1 = 0; r1 < n; ++r1) {
-        for (int c1 = 0; c1 < m; ++c1) {
-            for (int r2 = r1; r2 < n; ++r2) {
-                for (int c2 = c1; c2 < m; ++c2) {
-                    int sum1 = getSum(prefix, r1, c1, r2, c2);
+	vector<vector<int>> grid(N, vector<int>(M));
+	for (int y = 0; y < N; ++y) {
+		for (int x = 0; x < M; ++x) {
+			cin >> grid[y][x];
+		}
+	}
 
-                    for (int r3 = 0; r3 < n; ++r3) {
-                        for (int c3 = 0; c3 < m; ++c3) {
-                            for (int r4 = r3; r4 < n; ++r4) {
-                                for (int c4 = c3; c4 < m; ++c4) {
-                                    if (r3 > r2 || r4 < r1 || c3 > c2 || c4 < c1) {
-                                        int sum2 = getSum(prefix, r3, c3, r4, c4);
-                                        max_sum = max(max_sum, sum1 + sum2);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    return max_sum;
-}
-
-int main() {
-    int n, m;
-    vector<vector<int>> grid;
-    readGrid(n, m, grid);
-    cout << findMaxSum(grid) << endl;
-    return 0;
+	cout << GetMaxSum(grid);
 }
